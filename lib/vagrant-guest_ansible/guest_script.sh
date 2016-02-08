@@ -5,12 +5,16 @@ ANSIBLE_HOSTS=$2
 ANSIBLE_EXTRA_VARS="$3"
 TEMP_HOSTS="/tmp/ansible_hosts"
 
-if [ ! -f /vagrant/$ANSIBLE_PLAYBOOK ]; then
+VAGRANT_ROOT_PATH="${VAGRANT_ROOT_PATH:-/vagrant}"
+ANSIBLE_PLAYBOOK_PATH="$VAGRANT_ROOT_PATH/$ANSIBLE_PLAYBOOK"
+ANSIBLE_HOSTS_PATH="$VAGRANT_ROOT_PATH/$ANSIBLE_HOSTS"
+
+if [ ! -f $ANSIBLE_PLAYBOOK_PATH ]; then
         echo "ERROR: Cannot find the given Ansible playbook."
         exit 1
 fi
 
-if [ ! -f /vagrant/$ANSIBLE_HOSTS ]; then
+if [ ! -f $ANSIBLE_HOSTS_PATH ]; then
         echo "ERROR: Cannot find the given Ansible hosts file."
         exit 2
 fi
@@ -47,7 +51,7 @@ export PYTHONUNBUFFERED=1
 # show ANSI-colored output
 export ANSIBLE_FORCE_COLOR=true
 
-cp /vagrant/${ANSIBLE_HOSTS} ${TEMP_HOSTS} && chmod -x ${TEMP_HOSTS}
+cp ${ANSIBLE_HOSTS_PATH} ${TEMP_HOSTS} && chmod -x ${TEMP_HOSTS}
 echo "Running Ansible as $USER:"
-ansible-playbook /vagrant/${ANSIBLE_PLAYBOOK} --inventory-file=${TEMP_HOSTS} --connection=local $ANSIBLE_EXTRA_VARS
+ansible-playbook ${ANSIBLE_PLAYBOOK_PATH} --inventory-file=${TEMP_HOSTS} --connection=local $ANSIBLE_EXTRA_VARS
 rm ${TEMP_HOSTS}
