@@ -17,7 +17,7 @@ module VagrantPlugins
       attr_accessor :groups
       attr_accessor :host_key_checking
       # Allows to override Vagrant root path (defaults to '/vagrant';
-      # see guset_script.sh).
+      # see guest_script.sh).
       attr_accessor :vagrant_root
 
       # Joker attribute, used to pass unsupported arguments to ansible anyway
